@@ -1,0 +1,50 @@
+# Run from the project root:  docker compose -f deploy/docker-compose.yml up -d --build
+# Layout expected:  ./backend (Laravel)  ./frontend (React, built to ./frontend/dist)  ./deploy
+services:
+  db:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes: [db:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE}"]
+      interval: 10s
+      retries: 5
+
+  app:
+    build: { context: .., dockerfile: deploy/Dockerfile }
+    restart: always
+    volumes: ["../backend:/var/www/html"]
+    depends_on: { db: { condition: service_healthy } }
+
+  queue:       # sends receipts / emails
+    build: { context: .., dockerfile: deploy/Dockerfile }
+    restart: always
+    command: php artisan queue:work --sleep=3 --tries=3 --max-time=3600
+    volumes: ["../backend:/var/www/html"]
+    depends_on: [app]
+
+  scheduler:   # expires stale orders, prunes old tokens
+    build: { context: .., dockerfile: deploy/Dockerfile }
+    restart: always
+    command: sh -c "while true; do php artisan schedule:run --no-interaction; sleep 60; done"
+    volumes: ["../backend:/var/www/html"]
+    depends_on: [app]
+
+  web:         # Caddy: automatic HTTPS, serves the React build and proxies /api to PHP
+    image: caddy:2-alpine
+    restart: always
+    ports: ["80:80", "443:443"]
+    environment: { DOMAIN: "${DOMAIN}" }
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ../frontend/dist:/srv/frontend:ro
+      - ../backend:/var/www/html:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on: [app]
+
+volumes: { db: {}, caddy_data: {}, caddy_config: {} }
