@@ -1,7 +1,10 @@
 import { FormEvent, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../auth';
+<<<<<<< HEAD
 import { BrandPanel } from '../ui';
+=======
+>>>>>>> 1a41738b43c9d03c4732a7bc1df60272dac1c62a
 
 export default function Login() {
   const { login } = useAuth();
@@ -20,6 +23,7 @@ export default function Login() {
     finally { setBusy(false); }
   }
   return (
+<<<<<<< HEAD
     <div className="auth">
       <BrandPanel />
       <div className="authform">
@@ -35,6 +39,20 @@ export default function Login() {
           <p className="alt"><Link to="/forgot-password">Forgot password?</Link> · <Link to="/register">Create account</Link></p>
         </form>
       </div>
+=======
+    <div className="login">
+      <form className="lc" onSubmit={submit}>
+        <div className="logo dark">LUMIBOOK</div>
+        <h1>Welcome back.</h1>
+        {params.get('verified') && <p className="ok-text" role="status">Email verified. Please sign in.</p>}
+        {params.get('reset') && <p className="ok-text" role="status">Password updated. Please sign in.</p>}
+        <label>Email<input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="username" /></label>
+        <label>Password<input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" /></label>
+        {error && <p className="err" role="alert">{error}</p>}
+        <button className="btn n w" disabled={busy}>{busy ? 'Signing in…' : 'Sign in'}</button>
+        <p className="alt"><Link to="/forgot-password">Forgot password?</Link> · <Link to="/register">Create account</Link></p>
+      </form>
+>>>>>>> 1a41738b43c9d03c4732a7bc1df60272dac1c62a
     </div>
   );
 }

@@ -37,7 +37,11 @@ export default function Titles() {
   }
   return (
     <>
+<<<<<<< HEAD
       <div className="row between pagehead"><Head title="Titles" sub="Upload PDFs, set rights, and publish." /><button className="btn n" onClick={() => setOpen(!open)}>{open ? 'Cancel' : 'Add title'}</button></div>
+=======
+      <div className="row between"><Head title="Titles" sub="Upload PDFs, set rights, and publish." /><button className="btn n" onClick={() => setOpen(!open)}>{open ? 'Cancel' : 'Add title'}</button></div>
+>>>>>>> 1a41738b43c9d03c4732a7bc1df60272dac1c62a
       {open && (
         <form className="card form" onSubmit={create}>
           <label>Title<input name="title" required maxLength={200} /></label>

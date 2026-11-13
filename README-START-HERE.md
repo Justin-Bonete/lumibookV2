@@ -22,6 +22,7 @@ If PHP says an extension is missing (gd, fileinfo...), open php.ini (`php --ini`
 
 ## Trying payments locally
 Create a PayMongo account, copy the TEST secret key into `backend\.env` as `PAYMONGO_SECRET_KEY=sk_test_...`, then restart `php artisan serve`. For the webhook locally you need a tunnel (such as ngrok) pointed at port 8000 and a test webhook for `checkout_session.payment.paid`; see `backend-overlay\BACKEND_NOTES.md`. Local seeding adds TEST prices of 99 / 199 / 299 pesos.
+<<<<<<< HEAD
 
 ## Finish line (what is left before real customers)
 1. Run setup, `php artisan test` green, sign in as owner and as a member.
@@ -31,3 +32,5 @@ Create a PayMongo account, copy the TEST secret key into `backend\.env` as `PAYM
 5. Fill the [bracketed] details in the Terms, Privacy and Refunds pages and have them reviewed.
 6. Deploy (deploy/DEPLOY.md), switch PayMongo to LIVE, tick docs/LAUNCH_CHECKLIST.md.
 The public landing page is served at `/` for signed-out visitors (frontend/public/welcome.html).
+=======
+>>>>>>> 1a41738b43c9d03c4732a7bc1df60272dac1c62a

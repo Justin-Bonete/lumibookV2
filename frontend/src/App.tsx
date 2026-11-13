@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 import { useEffect } from 'react';
+=======
+>>>>>>> 1a41738b43c9d03c4732a7bc1df60272dac1c62a
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import { useAuth } from './auth';
 import Layout from './Layout';
@@ -30,9 +33,14 @@ function Guard({ role }: { role: Role }) {
 
 function Home() {
   const { me, loading } = useAuth();
+<<<<<<< HEAD
   // Signed-out visitors get the marketing landing page (static file in /public).
   useEffect(() => { if (!loading && !me) window.location.replace('/welcome.html'); }, [loading, me]);
   if (loading || !me) return <p className="center">Loading…</p>;
+=======
+  if (loading) return <p className="center">Loading…</p>;
+  if (!me) return <Navigate to="/login" replace />;
+>>>>>>> 1a41738b43c9d03c4732a7bc1df60272dac1c62a
   return <Navigate to={me.user.role === 'admin' ? '/admin' : '/app'} replace />;
 }
 
