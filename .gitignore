@@ -1,0 +1,22 @@
+# ==============================
+# ENVIRONMENT & SECRET PROTECTION
+# ==============================
+
+.env
+.env.*
+**/.env
+**/.env.*
+
+# Allow safe environment templates
+!.env.example
+!**/.env.example
+
+# Ignore private keys and certificates
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Ignore credentials and secrets
+secrets/
+credentials/
