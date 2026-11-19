@@ -20,6 +20,10 @@ class LumibookServiceProvider extends ServiceProvider
             Limit::perMinute(5)->by(strtolower((string) $r->input('email')) . '|' . $r->ip()), // slows password guessing per account
             Limit::perMinute(20)->by($r->ip()),
         ]);
+        RateLimiter::for('twofactor', fn (Request $r) => [
+            Limit::perMinute(5)->by(sha1((string) $r->input('challenge')) . '|' . $r->ip()), // guessing codes
+            Limit::perMinute(20)->by($r->ip()),
+        ]);
         RateLimiter::for('register', fn (Request $r) => Limit::perHour(10)->by($r->ip()));
         RateLimiter::for('downloads', fn (Request $r) => Limit::perMinute(20)->by($r->user()?->id ?: $r->ip()));
         RateLimiter::for('checkout', fn (Request $r) => Limit::perMinute(6)->by($r->user()?->id ?: $r->ip()));

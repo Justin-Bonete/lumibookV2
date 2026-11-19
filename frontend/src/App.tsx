@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 import { useEffect } from 'react';
-=======
->>>>>>> 1a41738b43c9d03c4732a7bc1df60272dac1c62a
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import { useAuth } from './auth';
 import Layout from './Layout';
@@ -20,6 +17,7 @@ import TitleDetail from './pages/member/TitleDetail';
 import Plans from './pages/member/Plans';
 import { CheckoutCancel, CheckoutSuccess } from './pages/member/CheckoutResult';
 import History from './pages/member/History';
+import Security from './pages/Security';
 import type { Role } from './types';
 
 /** Server enforces roles too; this just keeps the UI honest. */
@@ -33,14 +31,9 @@ function Guard({ role }: { role: Role }) {
 
 function Home() {
   const { me, loading } = useAuth();
-<<<<<<< HEAD
   // Signed-out visitors get the marketing landing page (static file in /public).
   useEffect(() => { if (!loading && !me) window.location.replace('/welcome.html'); }, [loading, me]);
   if (loading || !me) return <p className="center">Loading…</p>;
-=======
-  if (loading) return <p className="center">Loading…</p>;
-  if (!me) return <Navigate to="/login" replace />;
->>>>>>> 1a41738b43c9d03c4732a7bc1df60272dac1c62a
   return <Navigate to={me.user.role === 'admin' ? '/admin' : '/app'} replace />;
 }
 
@@ -62,6 +55,7 @@ export default function App() {
         <Route path="titles" element={<Titles />} />
         <Route path="collections" element={<Collections />} />
         <Route path="activity" element={<Activity />} />
+        <Route path="security" element={<Security />} />
       </Route>
       <Route path="/app" element={<Guard role="member" />}>
         <Route index element={<MyPlan />} />
@@ -71,6 +65,7 @@ export default function App() {
         <Route path="checkout/success" element={<CheckoutSuccess />} />
         <Route path="checkout/cancel" element={<CheckoutCancel />} />
         <Route path="history" element={<History />} />
+        <Route path="security" element={<Security />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

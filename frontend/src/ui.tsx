@@ -1,14 +1,10 @@
-<<<<<<< HEAD
 import { Icon, LogoMark } from './icons';
-=======
->>>>>>> 1a41738b43c9d03c4732a7bc1df60272dac1c62a
 import type { Usage } from './types';
 
 export const peso = (n: number | string | null) => (n === null || n === '' ? '—' : `₱${Number(n).toLocaleString(undefined, { maximumFractionDigits: 2 })}`);
 export const fmt = (d: string | null) => (d ? new Date(d).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : '—');
 export const Pill = ({ code, children }: { code: string; children: React.ReactNode }) => <span className={`pill ${code}`}>{children}</span>;
 export const Head = ({ title, sub }: { title: string; sub?: string }) => <div className="top"><h2>{title}</h2>{sub && <p>{sub}</p>}</div>;
-<<<<<<< HEAD
 export const initials = (name: string) => name.split(/\s+/).map((w) => w[0]).slice(0, 2).join('').toUpperCase();
 export const Status = ({ loading, error }: { loading: boolean; error: string }) =>
   error ? <p className="err" role="alert">{error}</p>
@@ -29,10 +25,6 @@ export function BrandPanel() {
     </div>
   );
 }
-=======
-export const Status = ({ loading, error }: { loading: boolean; error: string }) =>
-  error ? <p className="err" role="alert">{error}</p> : loading ? <p className="muted">Loading…</p> : null;
->>>>>>> 1a41738b43c9d03c4732a7bc1df60272dac1c62a
 
 export function Meter({ u }: { u: Usage }) {
   if (u.limit === null) return <small>{u.used} downloads · unlimited*</small>;

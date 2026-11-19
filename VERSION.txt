@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-LUMIBOOK complete build v4 (light UI + landing integrated) - generated 2026-11-12
-=======
-LUMIBOOK complete build v2 - phases 1 to 8 - generated 2026-11-11
->>>>>>> 1a41738b43c9d03c4732a7bc1df60272dac1c62a
+LUMIBOOK complete build v5 (two-factor sign-in added) - generated 2026-11-16

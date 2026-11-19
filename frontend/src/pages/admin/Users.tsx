@@ -1,10 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api, useFetch } from '../../api';
-<<<<<<< HEAD
 import { Head, Meter, Pill, Status, fmt, initials } from '../../ui';
-=======
-import { Head, Meter, Pill, Status, fmt } from '../../ui';
->>>>>>> 1a41738b43c9d03c4732a7bc1df60272dac1c62a
 import type { AdminUser, Paged, UserTrace } from '../../types';
 
 const PLANS: [string, string][] = [['free', 'Free'], ['premium', 'Premium'], ['plus', 'Premium Plus'], ['all', 'All Access']];
@@ -33,11 +29,7 @@ export default function Users() {
           <tbody>
             {data.data.map((u) => (
               <tr key={u.id} className="r" onClick={() => setSel(u.id)}>
-<<<<<<< HEAD
                 <td className="tcell"><span className="av">{initials(u.name)}</span><span><b>{u.name}</b><small>{u.email}</small></span></td>
-=======
-                <td><b>{u.name}</b><small>{u.email}</small></td>
->>>>>>> 1a41738b43c9d03c4732a7bc1df60272dac1c62a
                 <td><Pill code={u.plan.code}>{u.plan.name}</Pill></td>
                 <td><Meter u={u.usage} /></td>
                 <td>{u.titles_unlocked}</td>
@@ -59,10 +51,7 @@ function Drawer({ id, onClose, onChange }: { id: number; onClose(): void; onChan
   const { data, error, loading, reload } = useFetch<UserTrace>(`/admin/users/${id}`);
   const [plan, setPlan] = useState('');
   const [msg, setMsg] = useState('');
-<<<<<<< HEAD
   useEffect(() => { const h = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); }; window.addEventListener('keydown', h); return () => window.removeEventListener('keydown', h); }, [onClose]);
-=======
->>>>>>> 1a41738b43c9d03c4732a7bc1df60272dac1c62a
 
   async function act(path: string, body: unknown) {
     setMsg('');
@@ -70,12 +59,8 @@ function Drawer({ id, onClose, onChange }: { id: number; onClose(): void; onChan
     catch (e) { setMsg((e as Error).message); }
   }
   return (
-<<<<<<< HEAD
     <><div className="scrim on" onClick={onClose} />
     <div className="drawer open" role="dialog" aria-label="User details">
-=======
-    <div className="drawer open">
->>>>>>> 1a41738b43c9d03c4732a7bc1df60272dac1c62a
       <div className="row between"><h2>{data?.user.name ?? 'User'}</h2><button className="btn" onClick={onClose}>Close</button></div>
       <Status loading={loading} error={error} />
       {data && (
@@ -113,10 +98,6 @@ function Drawer({ id, onClose, onChange }: { id: number; onClose(): void; onChan
             {!data.audit.length && <div>No actions yet</div>}</div>
         </>
       )}
-<<<<<<< HEAD
     </div></>
-=======
-    </div>
->>>>>>> 1a41738b43c9d03c4732a7bc1df60272dac1c62a
   );
 }

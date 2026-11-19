@@ -2,7 +2,7 @@ export type Role = 'admin' | 'member';
 export interface Usage { used: number; limit: number | null; remaining: number | null; period: 'lifetime' | 'month' }
 export interface PlanRef { code: 'free' | 'premium' | 'plus' | 'all'; name: string; tier: number }
 export interface Summary { plan: PlanRef; usage: Usage; titles_unlocked: number }
-export interface Me extends Summary { user: { id: number; name: string; email: string; role: Role; email_verified: boolean } }
+export interface Me extends Summary { user: { id: number; name: string; email: string; role: Role; email_verified: boolean; two_factor_enabled: boolean } }
 export interface LibraryTitle { id: number; title: string; author: string; category: string; description: string | null; cover_url: string | null; file_size: number | null; unlocked: boolean }
 export interface TitleDetail extends LibraryTitle { required_plan: { code: string; name: string } | null; related: LibraryTitle[] }
 export interface Category { category: string; total: number }

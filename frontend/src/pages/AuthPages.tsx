@@ -2,16 +2,10 @@ import { FormEvent, ReactNode, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { api } from '../api';
 import { useAuth } from '../auth';
-<<<<<<< HEAD
 import { BrandPanel } from '../ui';
 
 function Shell({ title, sub, children }: { title: string; sub?: string; children: ReactNode }) {
   return <div className="auth"><BrandPanel /><div className="authform"><div className="lc"><h1>{title}</h1>{sub && <p className="muted">{sub}</p>}{children}</div></div></div>;
-=======
-
-function Shell({ title, sub, children }: { title: string; sub?: string; children: ReactNode }) {
-  return <div className="login"><div className="lc"><div className="logo dark">LUMIBOOK</div><h1>{title}</h1>{sub && <p className="muted">{sub}</p>}{children}</div></div>;
->>>>>>> 1a41738b43c9d03c4732a7bc1df60272dac1c62a
 }
 
 export function Register() {

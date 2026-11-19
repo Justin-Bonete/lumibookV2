@@ -4,7 +4,8 @@ import type { Me } from './types';
 
 interface Ctx {
   me: Me | null; loading: boolean;
-  login(email: string, password: string): Promise<void>;
+  login(email: string, password: string): Promise<{ challenge?: string }>;
+  verifyTwoFactor(challenge: string, code: string, recovery?: boolean): Promise<void>;
   register(name: string, email: string, password: string, confirm: string): Promise<void>;
   logout(): Promise<void>; refresh(): Promise<void>;
 }
@@ -22,7 +23,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => { refresh(); }, [refresh]);
 
   const login = async (email: string, password: string) => {
-    const r = await api<{ token: string }>('/login', { method: 'POST', body: { email, password } });
+    const r = await api<{ token?: string; two_factor?: boolean; challenge?: string }>('/login', { method: 'POST', body: { email, password } });
+    if (r.two_factor) return { challenge: r.challenge }; // password OK, authenticator code still needed
+    setToken(r.token!);
+    await refresh();
+    return {};
+  };
+  const verifyTwoFactor = async (challenge: string, code: string, recovery = false) => {
+    const r = await api<{ token: string }>('/login/two-factor', { method: 'POST', body: recovery ? { challenge, recovery_code: code } : { challenge, code } });
     setToken(r.token);
     await refresh();
   };
@@ -33,5 +41,5 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
   const logout = async () => { try { await api('/logout', { method: 'POST' }); } catch { /* already signed out */ } setToken(null); setMe(null); };
 
-  return <AuthCtx.Provider value={{ me, loading, login, register, logout, refresh }}>{children}</AuthCtx.Provider>;
+  return <AuthCtx.Provider value={{ me, loading, login, verifyTwoFactor, register, logout, refresh }}>{children}</AuthCtx.Provider>;
 }

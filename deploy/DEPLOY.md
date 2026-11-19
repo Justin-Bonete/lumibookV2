@@ -10,7 +10,7 @@ Ubuntu 22.04/24.04, 2 GB RAM minimum. Point your domain's A record at the server
 git clone <your repo> /srv/lumibook && cd /srv/lumibook      # ./backend ./frontend ./deploy
 cp backend/.env.example backend/.env                          # then add the block from .env.example.lumibook
 ```
-Set in `backend/.env`: `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://yourdomain.com`, `FRONTEND_URL=https://yourdomain.com`, `DB_CONNECTION=pgsql`, `DB_HOST=db`, DB name/user/password, mail settings, PayMongo keys, `QUEUE_CONNECTION=database`. Export `DOMAIN=yourdomain.com` (put it in `deploy/.env` next to the compose file with `DB_*` copied from backend/.env).
+Set in `backend/.env`: `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://yourdomain.com`, `FRONTEND_URL=https://yourdomain.com`, `DB_CONNECTION=pgsql`, `DB_HOST=db`, DB name/user/password, mail settings, PayMongo keys, `REQUIRE_ADMIN_2FA=true`, `QUEUE_CONNECTION=database`. Export `DOMAIN=yourdomain.com` (put it in `deploy/.env` next to the compose file with `DB_*` copied from backend/.env).
 
 ## 3. Build and start
 ```bash
