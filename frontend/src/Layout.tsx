@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from 'react';
-import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { api } from './api';
 import { useAuth } from './auth';
 import { Icon, LogoMark } from './icons';
@@ -48,7 +48,6 @@ function TwoFactorBanner() {
 
 export default function Layout({ children }: { children: ReactNode }) {
   const { me, logout } = useAuth();
-  const nav = useNavigate();
   const { pathname } = useLocation();
   const [open, setOpen] = useState(false);
   useEffect(() => setOpen(false), [pathname]);
@@ -74,7 +73,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           <span className="av lg">{initials(me.user.name)}</span>
           <div><b>{me.user.name}</b><small>{role === 'admin' ? 'Owner / Admin' : me.user.email}</small></div>
         </div>
-        <button className="btn ghost out" onClick={async () => { await logout(); nav('/login'); }}><Icon name="logout" size={16} /> Sign out</button>
+        <button className="btn ghost out" onClick={async () => { await logout(); window.location.assign('/welcome.html'); }}><Icon name="logout" size={16} /> Sign out</button>
       </aside>
       <div className="col">
         <header className="topbar">

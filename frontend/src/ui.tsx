@@ -14,7 +14,7 @@ export const Status = ({ loading, error }: { loading: boolean; error: string }) 
 export function BrandPanel() {
   return (
     <div className="brandpanel">
-      <div className="brand"><LogoMark size={36} /><span>LUMIBOOK</span></div>
+      <a className="brand" href="/welcome.html" aria-label="LUMIBOOK home"><LogoMark size={36} /><span>LUMIBOOK</span></a>
       <h2>Illuminate Your Mind.</h2>
       <p>Your digital world of knowledge. Discover, unlock and download authorized learning resources.</p>
       <ul>
