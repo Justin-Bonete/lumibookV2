@@ -21,7 +21,7 @@ class MemberController extends Controller
 
     public function me(Request $r)
     {
-        return ['user' => $r->user()->only('id', 'name', 'email', 'role') + ['email_verified' => $r->user()->hasVerifiedEmail()]] + $this->svc->summary($r->user());
+        return ['user' => $r->user()->only('id', 'name', 'email', 'role') + ['email_verified' => $r->user()->hasVerifiedEmail(), 'two_factor_enabled' => $r->user()->hasTwoFactor()]] + $this->svc->summary($r->user());
     }
 
     public function categories()

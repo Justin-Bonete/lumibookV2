@@ -18,20 +18,35 @@ class SecurityTest extends TestCase
         $this->seed(LumibookSeeder::class);
     }
 
-    public function test_every_admin_route_rejects_guests_and_members(): void
+    /** @return array<int, array{0:string,1:string}> every [method, url] under /api/admin */
+    private function adminRoutes(): array
     {
-        $member = User::factory()->create(['role' => 'member', 'status' => 'active']);
-        $checked = 0;
+        $out = [];
         foreach (Route::getRoutes() as $route) {
             if (! str_starts_with($route->uri(), 'api/admin')) continue;
             $uri = '/' . preg_replace('/\{[^}]+\}/', '1', $route->uri());
-            foreach (array_diff($route->methods(), ['HEAD']) as $method) {
-                $this->json($method, $uri)->assertStatus(401);
-                $this->actingAs($member, 'sanctum')->json($method, $uri)->assertStatus(403);
-                $checked++;
-            }
+            foreach (array_diff($route->methods(), ['HEAD']) as $method) $out[] = [$method, $uri];
         }
-        $this->assertGreaterThan(10, $checked); // guard against the loop silently matching nothing
+        return $out;
+    }
+
+    // Guests and members are checked in SEPARATE tests: actingAs() stays logged in for the rest of a test,
+    // so mixing them made a later "guest" request silently run as the member.
+    public function test_every_admin_route_rejects_guests(): void
+    {
+        $routes = $this->adminRoutes();
+        $this->assertGreaterThan(10, count($routes)); // guard against the loop silently matching nothing
+        foreach ($routes as [$method, $uri]) {
+            $this->json($method, $uri)->assertStatus(401);
+        }
+    }
+
+    public function test_every_admin_route_rejects_members(): void
+    {
+        $member = User::factory()->create(['role' => 'member', 'status' => 'active']);
+        foreach ($this->adminRoutes() as [$method, $uri]) {
+            $this->actingAs($member, 'sanctum')->json($method, $uri)->assertStatus(403);
+        }
     }
 
     public function test_api_responses_carry_security_headers(): void

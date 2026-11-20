@@ -1,11 +1,14 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\AuditLog;
 use App\Models\User;
+use App\Services\Totp;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\Rules\Password as PasswordRule;
@@ -34,7 +37,36 @@ class AuthController extends Controller
         $user = User::where('email', $r->email)->first();
         abort_unless($user && Hash::check($r->password, $user->password), 422, 'Invalid credentials.');
         abort_if($user->status !== 'active', 403, 'This account is suspended.');
+        if ($user->hasTwoFactor()) { // password was right; now ask for the authenticator code. No token yet.
+            return ['two_factor' => true, 'challenge' => Crypt::encryptString(json_encode(['id' => $user->id, 'exp' => now()->addMinutes(5)->timestamp]))];
+        }
         return ['token' => $user->createToken('web')->plainTextToken, 'user' => $user];
+    }
+
+    /** Second step of sign-in for accounts with two-factor on: authenticator code OR one recovery code. */
+    public function twoFactorLogin(Request $r)
+    {
+        $r->validate(['challenge' => 'required|string', 'code' => 'nullable|string', 'recovery_code' => 'nullable|string']);
+        try { $p = json_decode(Crypt::decryptString($r->challenge), true); } catch (\Throwable) { $p = null; }
+        abort_if(! $p || ! isset($p['id'], $p['exp']) || $p['exp'] < time(), 422, 'Sign-in expired. Please start again.');
+
+        $user = User::findOrFail($p['id']);
+        abort_if($user->status !== 'active' || ! $user->hasTwoFactor(), 403, 'Not allowed.');
+        $ok = $r->filled('code') ? Totp::verifyOnce($user->id, $user->two_factor_secret, $r->code)
+            : ($r->filled('recovery_code') && $this->useRecoveryCode($user, $r->recovery_code));
+        abort_unless($ok, 422, 'That code is not correct.');
+        return ['token' => $user->createToken('web')->plainTextToken, 'user' => $user];
+    }
+
+    private function useRecoveryCode(User $u, string $code): bool
+    {
+        $hashes = json_decode($u->two_factor_recovery_codes ?? '[]', true) ?: [];
+        $i = array_search(hash('sha256', strtolower(trim($code))), $hashes, true);
+        if ($i === false) return false;
+        unset($hashes[$i]); // each recovery code works once
+        $u->forceFill(['two_factor_recovery_codes' => json_encode(array_values($hashes))])->save();
+        AuditLog::create(['actor_user_id' => $u->id, 'action' => '2fa.recovery_code_used', 'entity_type' => 'User', 'entity_id' => $u->id]);
+        return true;
     }
 
     public function logout(Request $r)

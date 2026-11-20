@@ -3,6 +3,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\TwoFactorController;
 use App\Http\Controllers\WebhookController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -15,6 +16,7 @@ Route::get('health', function () { // for uptime monitors
 Route::get('plans', [CheckoutController::class, 'plans']);
 Route::post('register', [AuthController::class, 'register'])->middleware('throttle:register');
 Route::post('login', [AuthController::class, 'login'])->middleware('throttle:login');
+Route::post('login/two-factor', [AuthController::class, 'twoFactorLogin'])->middleware('throttle:twofactor');
 Route::post('forgot-password', [AuthController::class, 'forgot'])->middleware('throttle:6,1');
 Route::post('reset-password', [AuthController::class, 'reset'])->middleware('throttle:6,1');
 Route::get('email/verify/{id}/{hash}', [AuthController::class, 'verify'])->name('verification.verify')->middleware(['signed', 'throttle:6,1']);
@@ -27,6 +29,9 @@ Route::middleware(['auth:sanctum', 'role:any'])->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('email/verification-notification', [AuthController::class, 'resendVerification'])->middleware('throttle:6,1');
     Route::get('me', [MemberController::class, 'me']);
+    Route::post('2fa/setup', [TwoFactorController::class, 'setup'])->middleware('throttle:6,1');
+    Route::post('2fa/enable', [TwoFactorController::class, 'enable'])->middleware('throttle:6,1');
+    Route::post('2fa/disable', [TwoFactorController::class, 'disable'])->middleware('throttle:6,1');
     Route::get('library', [MemberController::class, 'library']);
     Route::get('categories', [MemberController::class, 'categories']);
     Route::get('titles/{title}', [MemberController::class, 'show']);
