@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LUMIBOOK Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F5F7FA;--card:#fff;--text:#101D32;--muted:#53657D;--line:rgba(16,29,50,.1);--navy:#101D32;--gold:#E8C879;--ok:#1f8a5b;--bad:#c0392b;--h:'Manrope',system-ui,sans-serif;--b:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1424;--card:#142238;--text:#F5F7FA;--muted:#a9b6c8;--line:rgba(255,255,255,.1)}}
+:root[data-theme="dark"]{--bg:#0b1424;--card:#142238;--text:#F5F7FA;--muted:#a9b6c8;--line:rgba(255,255,255,.1)}
+*{box-sizing:border-box;margin:0}body{background:var(--bg);color:var(--text);font:400 14.5px/1.55 var(--b);min-height:100vh}
+h1,h2,h3{font-family:var(--h);letter-spacing:-.01em}
+button{font:inherit;cursor:pointer}
+.login{min-height:100vh;display:grid;place-items:center;background:radial-gradient(ellipse at 50% 0,#24406c,#101D32 70%);padding:20px}
+.lc{width:min(440px,100%);background:#fff;color:#101D32;border-radius:24px;padding:36px;box-shadow:0 40px 80px -30px #000}
+.lc h1{font-size:28px;margin:14px 0 6px}.lc p{color:#53657D}
+.logo{font:800 17px var(--h);letter-spacing:.14em;display:flex;gap:9px;align-items:center}
+.btn{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:10px;padding:9px 16px;font-weight:600;transition:transform .2s}
+.btn:hover{transform:translateY(-2px)}.btn.g{background:linear-gradient(135deg,#f4dc9c,#E8C879);color:#101D32;border:0}.btn.n{background:#101D32;color:#E8C879;border:0}
+.btn.w{width:100%;padding:13px;margin-top:12px}.btn.d{color:var(--bad)}
+select,input{font:inherit;background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:9px 12px}
+.lc select{width:100%;margin-top:14px;background:#fff;color:#101D32}
+.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+aside{background:#101D32;color:#F5F7FA;padding:24px 16px;display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh}
+aside .logo{padding:0 10px 22px}aside small{color:#8e9db3;padding:0 10px;font-size:12px}
+.nav{background:none;border:0;color:#c9d3e0;text-align:left;padding:11px 14px;border-radius:10px;font-weight:500}.nav:hover{background:rgba(255,255,255,.07)}.nav.on{background:rgba(232,200,121,.14);color:#E8C879}
+.who{margin-top:auto;padding:14px;border-radius:12px;background:rgba(255,255,255,.06);font-size:13px}.who b{display:block}
+@media(max-width:860px){.app{grid-template-columns:1fr}aside{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center}.who{margin:0 0 0 auto}aside small{display:none}}
+main{padding:34px clamp(18px,4vw,44px);min-width:0}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:26px}.top h2{font-size:30px;font-weight:800}.top p{color:var(--muted)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;margin-bottom:22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;animation:up .5s both}
+@keyframes up{from{opacity:0;transform:translateY(12px)}}
+.stat b{display:block;font:800 32px var(--h)}.stat span{color:var(--muted);font-size:13px}
+.two{display:grid;grid-template-columns:1.2fr 1fr;gap:16px}@media(max-width:900px){.two{grid-template-columns:1fr}}
+.bars div{display:grid;grid-template-columns:100px 1fr 30px;gap:10px;align-items:center;margin:11px 0;font-size:13px}
+.bar{height:10px;border-radius:9px;background:var(--line);overflow:hidden}.bar i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,#c9a24d,#E8C879);transition:width .8s}
+.bar.low i{background:var(--ok)}.bar.full i{background:var(--bad)}
+.tw{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:16px}
+table{width:100%;border-collapse:collapse;min-width:720px}th{text-align:left;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;padding:13px 16px;border-bottom:1px solid var(--line)}
+td{padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:middle}tr:last-child td{border:0}tr.r{cursor:pointer}tr.r:hover td{background:rgba(232,200,121,.08)}
+td small{display:block;color:var(--muted)}
+.pill{display:inline-block;padding:3px 11px;border-radius:99px;font:600 12px var(--b)}
+.free{background:rgba(120,135,160,.2);color:var(--muted)}.premium{background:rgba(60,110,200,.18);color:#4a7fd6}.plus{background:rgba(232,200,121,.28);color:#a07a1c}.all{background:#101D32;color:#E8C879}
+.ok{background:rgba(31,138,91,.16);color:var(--ok)}.bad{background:rgba(192,57,43,.16);color:var(--bad)}.warn{background:rgba(232,200,121,.28);color:#a07a1c}
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}.tools input{flex:1;min-width:180px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:22px}
+.bk{animation:up .5s both}.cvr{aspect-ratio:3/4;border-radius:4px 12px 12px 4px;padding:16px;display:flex;flex-direction:column;justify-content:space-between;color:#fff;box-shadow:inset 5px 0 8px rgba(0,0,0,.25),0 16px 30px -12px rgba(16,29,50,.5);transition:transform .3s;position:relative}
+.bk:hover .cvr{transform:rotateY(-12deg) translateY(-4px)}.bk.lk .cvr{filter:grayscale(.85) brightness(.7)}
+.cvr small{font:600 9px var(--b);letter-spacing:.2em;color:var(--gold)}.cvr b{font:800 16px/1.15 var(--h)}
+.lock{position:absolute;inset:0;display:grid;place-items:center;font-size:30px}
+.bk h3{font-size:15px;margin:12px 0 2px}.bk p{color:var(--muted);font-size:12.5px;margin-bottom:8px}.bk .btn{width:100%;padding:8px}
+#dr{position:fixed;top:0;right:0;bottom:0;width:min(480px,100%);background:var(--bg);border-left:1px solid var(--line);box-shadow:-30px 0 60px -30px rgba(0,0,0,.4);transform:translateX(105%);transition:transform .4s cubic-bezier(.2,.8,.2,1);overflow:auto;padding:26px;z-index:20}
+#dr.o{transform:none}.tl{border-left:2px solid var(--line);margin:8px 0 18px 6px}.tl div{padding:4px 0 10px 16px;position:relative;font-size:13.5px}.tl div::before{content:"";position:absolute;left:-6px;top:10px;width:10px;height:10px;border-radius:50%;background:var(--gold)}.tl small{color:var(--muted);display:block}
+.sec{font:600 12px var(--b);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+#ts{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translate(-50%,30px);background:#101D32;color:#F5F7FA;padding:12px 20px;border-radius:12px;opacity:0;transition:.3s;z-index:40;max-width:90%}#ts.o{opacity:1;transform:translate(-50%,0)}#ts.e{background:var(--bad)}
+.note{font-size:12px;color:var(--muted);margin-top:14px}
+</style></head><body>
+<div id="root"></div><div id="dr"></div><div id="ts"></div>
+<script>
+const $=s=>document.querySelector(s),NOW=Date.now(),DAY=864e5;
+/* ---- Demo data layer: mirrors the Laravel EntitlementService rules (see lumibook-backend.zip) ---- */
+const PL={free:{n:'Free',tier:0,lim:3,per:'month',tag:'Explore knowledge.',cap:5},premium:{n:'Premium',tier:1,lim:10,per:'lifetime',tag:'Expand your library.',cap:20},plus:{n:'Premium Plus',tier:2,lim:30,per:'lifetime',tag:'Learn without limits.',cap:58},all:{n:'All Access',tier:3,lim:null,per:'lifetime',tag:'Unlock everything.',cap:null}};
+const COL={'Study Skills':'#2c4c82',Languages:'#4a5a7a',Science:'#7a5a1c',Technology:'#1f6a6a',Mathematics:'#6a3a7a',Business:'#3a6a3e',Humanities:'#8a3a3a'};
+const T=[['Foundations of Learning','A. Reyes','Study Skills',0],['Writing Well','P. Diaz','Languages',0],['The Curious Mind','M. Santos','Science',0],['Study Smarter','C. Ong','Study Skills',0],['Everyday Statistics','N. Cho','Mathematics',0],['Code & Craft','J. Cruz','Technology',1],['Inside the Atom','S. Reyes','Science',1],['Business Basics','K. Tan','Business',1],['Numbers at Work','L. Garcia','Mathematics',2],['Voices of History','R. Lim','Humanities',2],['Data Stories','E. Uy','Technology',2],['Archive Vol. 1','Unknown','Humanities',3]].map((t,i)=>({id:i+1,title:t[0],author:t[1],cat:t[2],t:t[3],rights:i==11?'pending':'cleared'}));
+const AUD=[];const log=(who,act,det)=>AUD.unshift({at:Date.now(),who,act,det});
+const acc=(u,t)=>{const p=PL[u.plan];return t.rights==='cleared'&&(p.cap===null||t.t<=p.tier)};
+const used=u=>{const p=PL[u.plan],m=new Date().getMonth();return u.dl.filter(e=>e.st!=='failed'&&(p.per!=='month'||new Date(e.at).getMonth()===m)).length};
+const left=u=>{const l=PL[u.plan].lim;return l===null?null:Math.max(0,l-used(u))};
+const U=[{id:1,name:'Owner',email:'owner@lumibook.test',role:'admin',plan:'all',status:'active',joined:120,dl:[],ent:[]}].concat([['Ana Reyes','premium',6,41,3],['Ben Torres','free',3,12,1.5],['Carla Mendoza','plus',18,88,3],['Dan Villanueva','all',31,63,2],['Eli Navarro','premium',10,57,3],['Faye Domingo','free',1,5,1.5],['Gio Ramos','plus',4,20,3],['Hana Cruz','premium',2,9,3],['Ivan Lopez','free',0,3,1.5]].map((a,i)=>({id:i+2,name:a[0],email:a[0].split(' ')[0].toLowerCase()+'@example.com',role:'member',plan:a[1],status:'active',joined:a[3],_n:a[2],_g:a[4]})));
+U.slice(1).forEach(u=>{const ok=T.filter(t=>acc(u,t));u.dl=Array.from({length:u._n},(_,k)=>({tid:ok[k%ok.length].id,at:NOW-(k*u._g+.3)*DAY,st:'completed'}));u.ent=[{plan:u.plan,at:NOW-u.joined*DAY,by:u.plan==='free'?'Sign-up':'Owner (verified payment)'}]});
+U[1+7].status='suspended';
+const API={
+ setPlan(id,plan){const u=U.find(x=>x.id==id);if(u.plan===plan)return;u.ent.push({plan,at:Date.now(),by:'Owner (manual grant)'});log('Owner','plan.assigned',`${u.name}: ${PL[u.plan].n} → ${PL[plan].n}`);u.plan=plan},
+ setStatus(id,st){const u=U.find(x=>x.id==id);u.status=st;log('Owner','user.'+st,u.name)},
+ setRights(tid,r){const t=T.find(x=>x.id==tid);t.rights=r;log('Owner','title.updated',`${t.title} → rights ${r}`)},
+ download(u,tid){const t=T.find(x=>x.id==tid);if(u.status!=='active')throw[403,'This account is suspended.'];if(t.rights!=='cleared')throw[404,'Title unavailable.'];if(!acc(u,t))throw[403,'Your plan does not include this title.'];if(left(u)===0)throw[429,'Download limit reached for your plan.'];u.dl.unshift({tid,at:Date.now(),st:'completed'});log(u.name,'download.completed',t.title)}
+};
+/* ---- UI ---- */
+let S={me:null,view:'',q:'',pf:'all',sel:null};
+const fmt=d=>new Date(d).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});
+const pill=p=>`<span class="pill ${p}">${PL[p].n}</span>`;
+const meter=u=>{const l=PL[u.plan].lim,n=used(u);if(l===null)return`<small>${n} downloads · unlimited*</small>`;const r=n/l;return`<div class="bar ${r>=1?'full':r<.5?'low':''}" style="width:130px"><i style="width:${Math.min(100,r*100)}%"></i></div><small>${n} / ${l} ${PL[u.plan].per==='month'?'this month':'lifetime'}</small>`};
+function toast(m,e){const t=$('#ts');t.textContent=m;t.className='o'+(e?' e':'');clearTimeout(t._t);t._t=setTimeout(()=>t.className='',2800)}
+const LOGO='<svg width="28" height="28" viewBox="0 0 32 32" fill="none"><path d="M16 9v16M16 25C12 22 7 22 4 23V9c3-1 8-1 12 2 4-3 9-3 12-2v14c-3-1-8-1-12 2Z" stroke="#E8C879" stroke-width="1.8" stroke-linejoin="round"/><path d="M16 1v5M10 3l2 3M22 3l-2 3" stroke="#E8C879" stroke-width="1.6" stroke-linecap="round"/></svg>';
+function login(){$('#root').innerHTML=`<div class="login"><div class="lc"><div class="logo">${LOGO}LUMIBOOK</div><h1>Welcome back.</h1><p>Sign in to your dashboard. Demo data shown below; no real accounts.</p>
+<button class="btn n w" data-a="in" data-id="1">Sign in as Owner / Admin</button>
+<select id="ms">${U.filter(u=>u.role==='member').map(u=>`<option value="${u.id}">${u.name} — ${PL[u.plan].n}${u.status==='suspended'?' (suspended)':''}</option>`).join('')}</select>
+<button class="btn g w" data-a="in" data-id="m">Sign in as Member</button></div></div>`}
+function shell(){const adm=S.me.role==='admin',nav=adm?[['ov','Overview'],['us','Users & plans'],['ti','Titles'],['ac','Activity']]:[['mp','My plan'],['li','Library'],['hi','Download history']];
+$('#root').innerHTML=`<div class="app"><aside><div class="logo">${LOGO}LUMIBOOK</div><small>${adm?'OWNER CONSOLE':'MEMBER AREA'}</small>${nav.map(n=>`<button class="nav${S.view===n[0]?' on':''}" data-a="v" data-id="${n[0]}">${n[1]}</button>`).join('')}<div class="who"><b>${S.me.name}</b>${adm?'Owner / Admin':PL[S.me.plan].n}<br><button class="btn" style="margin-top:10px;width:100%" data-a="out">Sign out</button></div></aside><main id="mn"></main></div>`;
+$('#mn').innerHTML=VIEWS[S.view]();}
+const head=(t,s)=>`<div class="top"><div><h2>${t}</h2><p>${s}</p></div></div>`;
+const members=()=>U.filter(u=>u.role==='member');
+const VIEWS={
+ov(){const m=members(),c=k=>m.filter(u=>u.plan===k).length,full=m.filter(u=>left(u)===0).length,dl=m.reduce((a,u)=>a+u.dl.filter(e=>NOW-e.at<30*DAY||e.at>NOW).length,0);
+return head('Overview','Everyone on the platform, at a glance.')+`<div class="cards"><div class="card stat"><b>${m.length}</b><span>Members</span></div><div class="card stat"><b>${m.length-c('free')}</b><span>On a paid plan</span></div><div class="card stat"><b>${full}</b><span>At their download limit</span></div><div class="card stat"><b>${m.filter(u=>u.status!=='active').length}</b><span>Suspended</span></div></div>
+<div class="two"><div class="card"><h3>Members by plan</h3><div class="bars">${Object.keys(PL).map(k=>`<div><span>${PL[k].n}</span><span class="bar"><i style="width:${c(k)/m.length*100}%"></i></span><b>${c(k)}</b></div>`).join('')}</div><p class="note">${dl} downloads in the last 30 days.</p></div>
+<div class="card"><h3>Recent activity</h3>${(AUD.slice(0,6).length?AUD.slice(0,6):[{at:NOW,who:'System',act:'No activity yet',det:''}]).map(a=>`<div style="padding:8px 0;border-bottom:1px solid var(--line)"><b>${a.who}</b> · ${a.act}<small style="display:block;color:var(--muted)">${a.det} ${fmt(a.at)}</small></div>`).join('')}</div></div>`},
+us(){const l=members().filter(u=>(S.pf==='all'||u.plan===S.pf)&&(u.name+u.email).toLowerCase().includes(S.q.toLowerCase()));
+return head('Users & plans','See every user, which plan they use, and how much they have used.')+`<div class="tools"><input id="q" placeholder="Search name or email…" value="${S.q}"><select id="pf"><option value="all">All plans</option>${Object.keys(PL).map(k=>`<option value="${k}"${S.pf===k?' selected':''}>${PL[k].n}</option>`).join('')}</select></div>
+<div class="tw"><table><tr><th>User</th><th>Plan</th><th>Downloads</th><th>Titles</th><th>Last download</th><th>Status</th></tr>${l.map(u=>`<tr class="r" data-a="op" data-id="${u.id}"><td><b>${u.name}</b><small>${u.email}</small></td><td>${pill(u.plan)}</td><td>${meter(u)}</td><td>${T.filter(t=>acc(u,t)).length} / ${T.length}</td><td>${u.dl[0]?fmt(u.dl[0].at):'—'}</td><td><span class="pill ${u.status==='active'?'ok':'bad'}">${u.status}</span></td></tr>`).join('')||'<tr><td colspan=6>No users match.</td></tr>'}</table></div><p class="note">*Unlimited is subject to fair-use and rate limits. Click a row to trace a user.</p>`},
+ti(){return head('Titles','Rights status gates what can be published and downloaded.')+`<div class="tw"><table><tr><th>Title</th><th>Category</th><th>Included from</th><th>Rights</th><th></th></tr>${T.map(t=>`<tr><td><b>${t.title}</b><small>${t.author}</small></td><td>${t.cat}</td><td>${t.t===3?'All Access':pill(['free','premium','plus'][t.t])+'+'}</td><td><span class="pill ${t.rights==='cleared'?'ok':t.rights==='pending'?'warn':'bad'}">${t.rights}</span></td><td><button class="btn" data-a="rt" data-id="${t.id}">${t.rights==='cleared'?'Block':'Mark cleared'}</button></td></tr>`).join('')}</table></div>`},
+ac(){return head('Activity','Audit trail of admin actions and downloads.')+`<div class="card">${AUD.map(a=>`<div style="padding:9px 0;border-bottom:1px solid var(--line)"><b>${a.who}</b> · <span class="pill free">${a.act}</span> ${a.det}<small style="display:block;color:var(--muted)">${new Date(a.at).toLocaleString()}</small></div>`).join('')||'<p>Nothing logged yet. Try changing a plan.</p>'}</div>`},
+mp(){const u=S.me,p=PL[u.plan],r=left(u),nxt=Object.keys(PL).find(k=>PL[k].tier===p.tier+1);
+return head('Hello, '+u.name.split(' ')[0],p.tag)+`<div class="cards"><div class="card"><span class="pill ${u.plan}">${p.n}</span><h3 style="margin:12px 0 4px">${p.cap===null?'All eligible titles':'Up to '+p.cap+' e-books'}</h3><p class="note" style="margin:0">${T.filter(t=>acc(u,t)).length} unlocked now</p></div>
+<div class="card"><h3>Downloads</h3><div style="margin:12px 0">${meter(u)}</div><p class="note" style="margin:0">${r===null?'Unlimited, subject to fair-use.':r+' left'+(p.per==='month'?' this month':' (lifetime total)')}</p></div></div>${u.status!=='active'?'<div class="card"><span class="pill bad">Suspended</span> Your account is suspended. Contact support.</div>':''}${nxt?`<div class="card"><h3>Want more?</h3><p class="note">Upgrade to ${PL[nxt].n}: ${PL[nxt].cap===null?'every eligible title':'up to '+PL[nxt].cap+' e-books'}, ${PL[nxt].lim===null?'unlimited downloads':PL[nxt].lim+' downloads'}. One-time payment.</p></div>`:''}`},
+li(){const u=S.me;return head('Library','Unlocked titles can be downloaded as PDF.')+`<div class="grid">${T.filter(t=>t.rights==='cleared').map((t,i)=>{const o=acc(u,t),need=['Free','Premium','Premium Plus','All Access'][t.t];return`<div class="bk${o?'':' lk'}" style="animation-delay:${i*.04}s"><div class="cvr" style="background:linear-gradient(145deg,${COL[t.cat]},#101D32)"><small>LUMIBOOK</small><b>${t.title}</b>${o?'':'<div class="lock">🔒</div>'}</div><h3>${t.title}</h3><p>${t.author} · ${t.cat}</p>${o?`<button class="btn g" data-a="dl" data-id="${t.id}">Download PDF</button>`:`<button class="btn" disabled style="opacity:.7">Requires ${need}</button>`}</div>`}).join('')}</div>`},
+hi(){const u=S.me;return head('Download history','Every download counted against your plan.')+`<div class="tw"><table><tr><th>Title</th><th>Date</th><th>Status</th></tr>${u.dl.map(e=>`<tr><td>${T.find(t=>t.id===e.tid).title}</td><td>${fmt(e.at)}</td><td><span class="pill ok">${e.st}</span></td></tr>`).join('')||'<tr><td colspan=3>Your learning journey is waiting. Discover your first book.</td></tr>'}</table></div>`}};
+function drawer(id){const u=U.find(x=>x.id==id);if(!u)return $('#dr').classList.remove('o');S.sel=id;
+$('#dr').innerHTML=`<div class="row" style="justify-content:space-between"><h2>${u.name}</h2><button class="btn" data-a="cl">Close</button></div><p class="note" style="margin:2px 0 14px">${u.email} · joined ${fmt(NOW-u.joined*DAY)}</p>
+<div class="row">${pill(u.plan)}<span class="pill ${u.status==='active'?'ok':'bad'}">${u.status}</span></div><div style="margin:14px 0">${meter(u)}</div>
+<div class="sec">Change plan</div><div class="row"><select id="np">${Object.keys(PL).map(k=>`<option value="${k}"${u.plan===k?' selected':''}>${PL[k].n}</option>`).join('')}</select><button class="btn n" data-a="sp" data-id="${u.id}">Apply</button><button class="btn d" data-a="ss" data-id="${u.id}">${u.status==='active'?'Suspend':'Reactivate'}</button></div>
+<div class="sec">Plan history</div><div class="tl">${u.ent.slice().reverse().map(e=>`<div><b>${PL[e.plan].n}</b><small>${fmt(e.at)} · ${e.by}</small></div>`).join('')}</div>
+<div class="sec">Downloads (${u.dl.length})</div><div class="tl">${u.dl.slice(0,12).map(e=>`<div>${T.find(t=>t.id===e.tid).title}<small>${fmt(e.at)}</small></div>`).join('')||'<div>None yet</div>'}</div>
+<div class="sec">Admin actions</div><div class="tl">${AUD.filter(a=>a.det.startsWith(u.name)).slice(0,8).map(a=>`<div>${a.act}<small>${new Date(a.at).toLocaleString()}</small></div>`).join('')||'<div>No admin actions yet</div>'}</div>`;$('#dr').classList.add('o')}
+function render(){if(!S.me)return login();shell();if(S.sel)drawer(S.sel)}
+document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el)return;const a=el.dataset.a,id=el.dataset.id;
+if(a==='in'){S.me=U.find(u=>u.id==(id==='m'?$('#ms').value:id));S.view=S.me.role==='admin'?'ov':'mp';S.sel=null;render()}
+else if(a==='out'){S.me=null;S.sel=null;$('#dr').classList.remove('o');render()}
+else if(a==='v'){S.view=id;S.sel=null;$('#dr').classList.remove('o');shell()}
+else if(a==='op')drawer(id);else if(a==='cl'){S.sel=null;$('#dr').classList.remove('o')}
+else if(a==='sp'){API.setPlan(id,$('#np').value);toast('Plan updated');render()}
+else if(a==='ss'){const u=U.find(x=>x.id==id);API.setStatus(id,u.status==='active'?'suspended':'active');toast('Status updated');render()}
+else if(a==='rt'){const t=T.find(x=>x.id==id);API.setRights(id,t.rights==='cleared'?'blocked':'cleared');shell()}
+else if(a==='dl'){try{API.download(S.me,+id);toast('Download started: signed link valid for 5 minutes');shell()}catch(x){toast(`${x[0]}: ${x[1]}`,1)}}});
+document.addEventListener('input',e=>{if(e.target.id==='q'){S.q=e.target.value;const p=e.target.selectionStart;$('#mn').innerHTML=VIEWS.us();const q=$('#q');q.focus();q.setSelectionRange(p,p)}});
+document.addEventListener('change',e=>{if(e.target.id==='pf'){S.pf=e.target.value;$('#mn').innerHTML=VIEWS.us()}});
+render();
+</script></body></html>

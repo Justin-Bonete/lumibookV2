@@ -1,0 +1,37 @@
+# LUMIBOOK complete build v2 (phases 1-8)
+
+## Folder map
+| Folder | What it is |
+| --- | --- |
+| `backend-overlay/` | LUMIBOOK's Laravel files (the setup script copies them onto a fresh Laravel project into `backend/`) |
+| `frontend/` | React + TypeScript website and dashboards |
+| `deploy/` + `docs/` | Docker/HTTPS deployment, backup script, security / UAT / launch checklists |
+| `landing/` | The premium 3D landing page (single HTML file, just double-click) |
+| `demo/` | The dashboard demo on fake data (single HTML file) |
+
+## Run it on Windows (about 5 minutes)
+Needs PHP 8.2+, Composer, Node 18+.
+1. Extract this zip to a NEW empty folder, for example `C:\dev\lumibook` (not into System32).
+2. Open PowerShell in that folder and run:
+   `powershell -ExecutionPolicy Bypass -File .\setup-windows.ps1`
+3. When it prints DONE, run:
+   `powershell -ExecutionPolicy Bypass -File .\start-dev.ps1`
+4. Sign in at http://localhost:5173 with `owner@lumibook.test` / `ChangeMe!2026` (owner) or `premium@lumibook.test` / `password` (member).
+
+If PHP says an extension is missing (gd, fileinfo...), open php.ini (`php --ini` shows where) and remove the `;` before that `extension=` line.
+
+## Already set up an older version?
+Extract this zip over your existing folder (choose overwrite), then run `powershell -ExecutionPolicy Bypass -File .\update-windows.ps1`. It re-copies the backend files, runs new migrations and tests, and installs new frontend packages. Your `.env`, database and uploaded files are kept.
+
+## Trying payments locally
+Create a PayMongo account, copy the TEST secret key into `backend\.env` as `PAYMONGO_SECRET_KEY=sk_test_...`, then restart `php artisan serve`. For the webhook locally you need a tunnel (such as ngrok) pointed at port 8000 and a test webhook for `checkout_session.payment.paid`; see `backend-overlay\BACKEND_NOTES.md`. Local seeding adds TEST prices of 99 / 199 / 299 pesos.
+
+## Finish line (what is left before real customers)
+1. Run setup, `php artisan test` green, sign in as owner and as a member.
+2. Turn on two-factor for the owner (Security page); in production set `REQUIRE_ADMIN_2FA=true`.
+3. Upload 3+ real PDFs, mark rights cleared, publish, add them to plan collections.
+4. Set plan prices (owner console, Plan collections, Price).
+5. PayMongo TEST mode: buy a plan end to end (see docs/UAT_CHECKLIST.md).
+6. Fill the [bracketed] details in the Terms, Privacy and Refunds pages and have them reviewed.
+7. Deploy (deploy/DEPLOY.md), switch PayMongo to LIVE, tick docs/LAUNCH_CHECKLIST.md.
+The public landing page is served at `/` for signed-out visitors (frontend/public/welcome.html).

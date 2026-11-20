@@ -1,0 +1,1 @@
+LUMIBOOK complete build v6 (titles manager: edit, delete, drag-and-drop, auto cover) - generated 2026-11-20
